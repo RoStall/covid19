@@ -5,6 +5,11 @@ library(lubridate)
 # load time series data from CSSEGIS johns hopkins folks
 # https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series
 
+# TODO is time series data cumulative or total as of the day?
+# TODO comparative rates with other states
+# TODO comparative rates with lagged data based on onset of confirmed cases... other states, perhaps countries
+# CONSIDER what might a shiny app look like? For the whole deal.
+# TODO when reporting, show a differential? maybe ?
 t_series_url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series'
 
 confirmed_url = paste0(t_series_url, '/time_series_19-covid-Confirmed.csv')
@@ -42,6 +47,20 @@ ky_deaths = deaths %>%
   mutate(date = mdy(date)) %>%
   arrange(date)
 
-ggplot(ky_conf, aes(date, value)) + geom_col()
+ky_merged = inner_join(ky_conf, ky_deaths) %>% 
+  inner_join(ky_recovered) %>% 
+  select(date, confirmed, deaths, recovered) %>%
+  pivot_longer(cols = -date)
+
+ggplot(ky_merged, aes(date, value, fill = name)) + 
+  geom_col(position = 'fill') +
+  scale_x_date(limits = c(Sys.Date() - 15, NA))
+  
+ggplot(ky_merged, aes(date, value, color = name)) + 
+  geom_line() +
+  scale_x_date(limits = c(Sys.Date() - 15, NA))
+
+
+
 
 
