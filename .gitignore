@@ -31,3 +31,5 @@ vignettes/*.html vignettes/*.pdf
 .Rproj.user/54667E0B/sources/s-435C21CC/693B3410-contents
 .Rproj.user/54667E0B/sources/s-435C21CC/693B3410-contents
 .Rproj.user/shared/notebooks/paths
+*.png
+.Rproj.user/shared/notebooks/paths
