@@ -1,8 +1,8 @@
 # point/line plots US States
 
+us_line_plots = function(savedir) {
 library(tidyverse)
 library(ggthemes)
-library(directlabels)
 library(ggrepel)
 
 source('common_functions.R')
@@ -42,26 +42,8 @@ ggplot(us_confirmed_highlights, aes(date, confirmed_1000, group = state, color =
        y = 'Confirmed per 1000',
        caption = 'Source: CSSE Data | Figure by R. Stallard')
 
-ggplot(us_confirmed_highlights %>% filter(state %in% highlight_states), 
-       aes(date, confirmed_1000, color = state)) +
-  geom_line(size = 1) + geom_point() +
-  # geom_text(data = us_confirmed_highlights %>% 
-  #             filter(state %in% highlight_states,
-  #                    date == last(date)),
-  #           aes(label = state, 
-  #                x = date + 2, 
-  #                y = confirmed_1000, 
-  #                color = state)) + 
-  guides(color = FALSE) +
-  scale_x_date(expand = c(0,3), limits = c(as.Date('2020-03-08'), NA), breaks = scales::pretty_breaks(5)) +
-  scale_color_manual(values = cols) +
-  theme_tufte() +
-  labs(title = 'Confirmed COVID-19 Cases, per 1000 People',
-       subtitle = 'Selected States',
-       color = 'State',
-       x = 'Date',
-       y = 'Confirmed per 1000 as of Date',
-       caption = 'Source: CSSE Data | Figure by R. Stallard')
+ggsave(paste0(savedir, 'us_confirmed_allstates.png'), dpi = 400)
+
 
 ggplot(us_confirmed_highlights %>% 
          filter(state %in% highlight_states), 
@@ -93,6 +75,7 @@ ggplot(us_confirmed_highlights %>%
        y = 'Confirmed per 1000 as of Date',
        caption = 'Source: CSSE Data | Figure by R. Stallard')
 
+ggsave(paste0(savedir, 'us_confirmed_highlights_only.png'), dpi = 400)
 
 ggplot(us_deaths_highlights, aes(date, deaths_100000, group = state, color = state_highlight)) + 
   geom_line(alpha = 0.7, size = 1) +
@@ -106,6 +89,7 @@ ggplot(us_deaths_highlights, aes(date, deaths_100000, group = state, color = sta
        y = 'Deaths per 100,000 as of Date',
        caption = 'Source: CSSE Data | Figure by R. Stallard')
 
+ggsave(paste0(savedir, 'us_deaths_allstates.png'), dpi = 400)
 
 ggplot(us_deaths_highlights %>% filter(state %in% state_highlight),
        aes(date, deaths_100000, group = state, color = state_highlight)) + 
@@ -119,3 +103,7 @@ ggplot(us_deaths_highlights %>% filter(state %in% state_highlight),
        x = 'Date',
        y = 'Deaths per 100,000 as of Date',
        caption = 'Source: CSSE Data | Figure by R. Stallard')
+
+ggsave(paste0(savedir, 'us_deaths_highlights_only.png'), dpi = 400)
+
+}

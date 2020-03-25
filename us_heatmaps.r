@@ -1,5 +1,6 @@
 # US Heatmaps
 
+us_heatmaps = function(savedir) {
 library(tidyverse)
 library(ggthemes)
 library(viridis)
@@ -23,7 +24,7 @@ ggplot(us_confirmed, aes(date, state, fill = confirmed_1000)) +
          caption = 'Source: CSSE Data | Figure by R. Stallard') +
   theme_tufte()
 
-ggsave('graphics/us_states_confirmed_heatmap.png', height = 8, width = 8, units = 'in', dpi = 400)  
+ggsave(paste0(savedir, 'us_states_confirmed_heatmap.png'), height = 8, width = 8, units = 'in', dpi = 400)  
   
 ggplot(us_deaths, aes(date, state, fill = deaths_100000)) +
   geom_tile(color = 'black') +
@@ -37,7 +38,7 @@ ggplot(us_deaths, aes(date, state, fill = deaths_100000)) +
        caption = 'Source: CSSE Data | Figure by R. Stallard') +
   theme_tufte()
 
-ggsave('graphics/us_states_deaths_heatmap.png', height = 8, width = 8, units = 'in')
+ggsave(paste0(savedir, 'us_states_deaths_heatmap.png'), height = 8, width = 8, units = 'in')
 
 
 ggplot(us_recovered, aes(date, state, fill = recovered_1000)) +
@@ -51,3 +52,5 @@ ggplot(us_recovered, aes(date, state, fill = recovered_1000)) +
        y = 'State',
        caption = 'Source: CSSE Data | Figure by R. Stallard') +
   theme_tufte()
+
+}
