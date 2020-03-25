@@ -95,6 +95,15 @@ ggplot(us_deaths_highlights %>% filter(state %in% state_highlight),
        aes(date, deaths_100000, group = state, color = state_highlight)) + 
   geom_line(alpha = 0.7, size = 1) +
   geom_point() +
+  geom_text_repel(data = us_deaths_highlights %>%
+                    filter(state %in% highlight_states,
+                           date == last(date)),
+                  aes(label = state,
+                      x = date + 2,
+                      y = deaths_100000,
+                      color = state),
+                  direction = 'y') +
+  guides(color = FALSE) +
   scale_x_date(expand = c(0,0), limits = c(as.Date('2020-03-08'), NA)) +
   scale_color_manual(values = cols) +
   theme_tufte() +
