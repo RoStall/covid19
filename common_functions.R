@@ -9,14 +9,14 @@ t_series_url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
 
 confirmed_url = paste0(t_series_url, '/time_series_19-covid-Confirmed.csv')
 deaths_url = paste0(t_series_url, '/time_series_19-covid-Deaths.csv')
-recovered_url = paste0(t_series_url, '/time_series_19-covid-Recovered.csv')
+
 
 global_confirmed_url = paste0(t_series_url, '/time_series_covid19_confirmed_global.csv')
 global_deaths_url = paste0(t_series_url, '/time_series_covid19_deaths_global.csv')
 
 confirmed = read_csv(confirmed_url)
 deaths = read_csv(deaths_url)
-recovered = read_csv(recovered_url)
+
 
 global_confirmed = read_csv(global_confirmed_url)
 global_deaths = read_csv(global_deaths_url)
@@ -52,20 +52,6 @@ get_us_deaths = function() {
   # as I understand it, per 1e5 is common for deaths metric
 }
 
-get_us_recovered = function() {
-  us_recovered = recovered %>%
-    rename('state' = `Province/State`) %>%
-    mutate(state = stringr::str_to_lower(state)) %>%
-    inner_join(df_pop_state, by = c('state' = 'region')) %>%
-    rename('state_pop' = value) %>%
-    pivot_longer(cols = c(-state, -`Country/Region`, -Lat, -Long, -state_pop), 
-                 names_to = 'date', 
-                 values_to = 'recovered') %>%
-    select(-Lat, -Long) %>%
-    mutate(date = mdy(date)) %>%
-    arrange(date) %>%
-    mutate(recovered_1000 = recovered/state_pop*1000)
-}
 
 get_global_confirmed = function() {
   global_confirmed_long = global_confirmed %>%
