@@ -2,7 +2,9 @@
 
 library(tidyverse)
 library(ggthemes)
-# TODO where applicable move line labels to the geom_line itself.
+library(directlabels)
+library(ggrepel)
+
 source('common_functions.R')
 
 us_confirmed = get_us_confirmed()
@@ -43,12 +45,50 @@ ggplot(us_confirmed_highlights, aes(date, confirmed_1000, group = state, color =
 ggplot(us_confirmed_highlights %>% filter(state %in% highlight_states), 
        aes(date, confirmed_1000, color = state)) +
   geom_line(size = 1) + geom_point() +
-  scale_x_date(expand = c(0,0), limits = c(as.Date('2020-03-19'), NA)) +
+  # geom_text(data = us_confirmed_highlights %>% 
+  #             filter(state %in% highlight_states,
+  #                    date == last(date)),
+  #           aes(label = state, 
+  #                x = date + 2, 
+  #                y = confirmed_1000, 
+  #                color = state)) + 
+  guides(color = FALSE) +
+  scale_x_date(expand = c(0,3), limits = c(as.Date('2020-03-08'), NA), breaks = scales::pretty_breaks(5)) +
   scale_color_manual(values = cols) +
   theme_tufte() +
   labs(title = 'Confirmed COVID-19 Cases, per 1000 People',
        subtitle = 'Selected States',
-       color = ' State',
+       color = 'State',
+       x = 'Date',
+       y = 'Confirmed per 1000 as of Date',
+       caption = 'Source: CSSE Data | Figure by R. Stallard')
+
+ggplot(us_confirmed_highlights %>% 
+         filter(state %in% highlight_states), 
+       aes(date, confirmed_1000, color = state)) +
+  geom_line(size = 1) + geom_point() + 
+  # geom_text(data = us_confirmed_highlights %>%
+  #             filter(state %in% highlight_states,
+  #                    date == last(date)),
+  #           aes(label = state,
+  #                x = date + 2,
+  #                y = confirmed_1000,
+  #                color = state)) +
+  geom_text_repel(data = us_confirmed_highlights %>%
+                    filter(state %in% highlight_states,
+                           date == last(date)),
+                  aes(label = state,
+                      x = date + 2,
+                      y = confirmed_1000,
+                      color = state),
+                  direction = 'y') +
+  guides(color = FALSE) +
+  scale_x_date(expand = c(0,3), limits = c(as.Date('2020-03-08'), NA), breaks = scales::pretty_breaks(5)) +
+  scale_color_manual(values = cols) +
+  theme_tufte() +
+  labs(title = 'Confirmed COVID-19 Cases, per 1000 People',
+       subtitle = 'Selected States',
+       color = 'State',
        x = 'Date',
        y = 'Confirmed per 1000 as of Date',
        caption = 'Source: CSSE Data | Figure by R. Stallard')
