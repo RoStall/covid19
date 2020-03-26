@@ -5,7 +5,7 @@ library(tidyverse)
 
 source('common_functions.R')
 
-# country group: 
+# country group: cn, us, it, can, fra, uk, iran, pal 
 # animated stacked area chart of selected countries
 
-# line/point plots for selected countriues
+# line/point plots for selected countries
